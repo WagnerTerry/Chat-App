@@ -1,0 +1,40 @@
+.card {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 8px;
+
+    .left-side {
+        margin-right: 16px;
+    }
+
+    .icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .center {
+        flex: 1;
+
+        .title {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+    }
+
+    .right-side {
+        display: flex;
+        align-items: center;
+
+        .word {
+            font-size: 16px;
+            font-weight: bold;
+        }
+    }
+}

@@ -7,6 +7,7 @@
 - npm i react-router-dom
 - npm i axios
 - npm i socket.io-client
+- npm i @mui/icons-material
 
 ## Configurando conexão
 Configure connection:
