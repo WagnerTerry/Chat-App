@@ -1,10 +1,10 @@
 import React, { useState, ChangeEvent } from 'react'
-// import {useNavigate} from 'react-router-dom'
+import { useNavigate, Link, } from 'react-router-dom';
 
 import "./style.scss"
 
 const AgentConnection: React.FC = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [name, setName] = useState('')
     const [maxCalls, setMaxCalls] = useState('')
 
@@ -19,13 +19,12 @@ const AgentConnection: React.FC = () => {
     const handleJoinRoom = () => {
         if (name.trim() !== '' && maxCalls.trim() !== '') {
             console.log("entrar")
-            // navigate(`/chat?name=${encodeURIComponent(name)}&maxCalls=${encodeURIComponent(maxCalls)}`);
-
+            navigate('/ServiceScreen', { state: { name, maxCalls } });            // navigate(`/chat?name=${encodeURIComponent(name)}&maxCalls=${encodeURIComponent(maxCalls)}`);
         }
     }
 
     return (
-        <div>
+        <div id="agent-connection">
             <h1>Tela de conexão do agente</h1>
 
             <div className='connection-data'>
@@ -37,7 +36,9 @@ const AgentConnection: React.FC = () => {
                     <label htmlFor="maxCalls" className="input-label">Máximo de chamadas</label>
                     <input type="text" value={maxCalls} className="styled-input" placeholder='Máximo de chamadas' onChange={handleMaxCallsChange} />
                 </div>
-                <button className="styled-button" onClick={handleJoinRoom}>Conectar</button>
+                <Link to="/ServiceScreen">
+                    <button className="styled-button" onClick={handleJoinRoom}>Conectar</button>
+                </Link>
             </div>
 
         </div>
