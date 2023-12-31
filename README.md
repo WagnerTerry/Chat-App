@@ -8,6 +8,8 @@
 - npm i axios
 - npm i socket.io-client
 - npm i @mui/icons-material
+- npm i @mui/material
+- npm i @emotion/react
 
 ## Configurando conexão
 Configure connection:

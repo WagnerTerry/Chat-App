@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom"
 import Card from "../../Components/Card";
-// import ChatIcon from '@mui/icons-material/Chat';
+import ChatIcon from '@mui/icons-material/Chat';
 
 import './style.scss'
 
@@ -19,13 +19,16 @@ export const ServiceScreen = () => {
 
             <h2>Atendimento</h2>
 
-            <Card
-
-                icon={"ChatIcon"}
-                title="Título do Card"
-                subtitle="Subtítulo do Card"
-                word="12:40"
-            />
+            <main>
+                <div className="chat-list">
+                    <Card
+                        icon={ChatIcon}
+                        title="Título do Card"
+                        subtitle="Subtítulo do Card"
+                        word="12:40"
+                    />
+                </div>
+            </main>
 
 
         </div>
