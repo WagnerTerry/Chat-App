@@ -17,16 +17,32 @@ export const ServiceScreen = () => {
                 <button>Desconectar</button>
             </header>
 
-            <h2>Atendimento</h2>
 
             <main>
                 <div className="chat-list">
+                    <h2>Atendimento</h2>
                     <Card
                         icon={ChatIcon}
                         title="Título do Card"
                         subtitle="Subtítulo do Card"
                         word="12:40"
                     />
+                </div>
+                <div className="chat-information">
+                    <h3>Chamada selecionada</h3>
+
+                    <span>
+                        CallId: 123121 <br />
+                        Midia: CHAT <br />
+                        Data Inicial: 20/12/2023 13:30:10 <br />
+                        Serviço: Nova matrícula <br />
+                        Origem: Lucas <br />
+                    </span>
+
+                    <div className="end-chat">
+                        <button>Finalizar</button>
+                    </div>
+
                 </div>
             </main>
 
