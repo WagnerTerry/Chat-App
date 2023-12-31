@@ -13,7 +13,7 @@ export const ServiceScreen = () => {
             <h1>Tela de atendimento</h1>
 
             <header>
-                <strong>{location && location.state && location.state.name}</strong>
+                <strong>{location && location.state && location.state.username}</strong>
                 <button>Desconectar</button>
             </header>
 
