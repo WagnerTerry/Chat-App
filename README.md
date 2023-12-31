@@ -16,6 +16,11 @@ Configure connection:
 - server url: https://dev.digitro.com
 - json config: {"path": "/callcontrol", "forceNew": true, "reconnectionAttempts": 3, "timeout": 2000}
 
+## Rodando o projeto
+- no terminal instale as dependencias rodando
+- npm i
+- logo após execute o npm run dev
+
 ## Detalhes do desafio front-end
 
 Desenvolver uma interface em React que simule uma aplicação simples de conversas de chat.
