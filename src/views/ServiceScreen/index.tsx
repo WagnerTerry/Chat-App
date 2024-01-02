@@ -33,7 +33,6 @@ export const ServiceScreen = () => {
 
             socket.emit('USER_CONNECT', userData);
 
-
             // Ouvir eventos de chamadas do servidor
             socket.on('NEW_CALL', (callData: CallData) => {
                 // Exibir informações da chamada no console
@@ -84,6 +83,10 @@ export const ServiceScreen = () => {
                         const hours = startDate.getHours().toString().padStart(2, '0');
                         const minutes = startDate.getMinutes().toString().padStart(2, '0');
 
+                        // // Obtém minutos e segundos formatados
+                        // const minutes = startDate.getMinutes().toString().padStart(2, '0');
+                        // const seconds = startDate.getSeconds().toString().padStart(2, '0');
+
                         return (
                             <Card
                                 key={index}
@@ -112,7 +115,6 @@ export const ServiceScreen = () => {
 
                 </div>
             </main>
-
 
         </div>
     )

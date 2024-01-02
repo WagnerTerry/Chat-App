@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import './style.scss';
@@ -11,25 +11,6 @@ const AgentConnection: React.FC = () => {
     const webSocketService = WebSocketService.getInstance()
     const socket = webSocketService.getSocket();
 
-
-    useEffect(() => {
-        // Se o serviço WebSocket não estiver inicializado, inicialize-o
-        if (!socket) {
-            console.log('Inicializando conexão WebSocket...');
-            const newSocket = webSocketService.getSocket();
-
-            if (newSocket) {
-                // Adicione event listeners ou lógica específica aqui, se necessário
-            }
-        }
-
-        // Cleanup: Certifique-se de desconectar quando o componente for desmontado
-        // return () => {
-        //     console.log('Desmontando componente. Desconectando WebSocket...');
-        //     webSocketService.disconnect();
-        // };
-    }, [socket, webSocketService]); // Depen
-
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
     };
@@ -40,11 +21,6 @@ const AgentConnection: React.FC = () => {
 
     const handleJoinRoom = () => {
         if (username.trim() !== '' && maxCalls.trim() !== '' && socket) {
-            // Enviar o evento USER_CONNECT para o servidor
-            socket.emit('USER_CONNECT', {
-                username,
-                maxCalls: parseInt(maxCalls, 10), // Converter para número
-            });
 
             navigate('/ServiceScreen', { state: { username, maxCalls } });
         }
