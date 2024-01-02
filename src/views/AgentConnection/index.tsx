@@ -1,39 +1,34 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { io, Socket } from 'socket.io-client';
 
 import './style.scss';
+import WebSocketService from '../../services/WebSocketService';
 
 const AgentConnection: React.FC = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [maxCalls, setMaxCalls] = useState('');
-    const [socket, setSocket] = useState<Socket | null>(null);
+    const webSocketService = WebSocketService.getInstance()
+    const socket = webSocketService.getSocket();
+
 
     useEffect(() => {
-        // Configuração das opções de conexão
-        const socketOptions = {
-            path: '/callcontrol',
-            forceNew: true,
-            reconnectionAttempts: 3,
-            timeout: 2000,
-        };
+        // Se o serviço WebSocket não estiver inicializado, inicialize-o
+        if (!socket) {
+            console.log('Inicializando conexão WebSocket...');
+            const newSocket = webSocketService.getSocket();
 
-        // Conectar ao servidor via WebSocket com as opções especificadas
-        const socket = io('https://dev.digitro.com/', socketOptions);
-        setSocket(socket);
+            if (newSocket) {
+                // Adicione event listeners ou lógica específica aqui, se necessário
+            }
+        }
 
-        // Verificar se a conexão foi bem-sucedida
-        socket.on('connect', () => {
-            console.log('Conectado ao servidor');
-        });
-
-        // Verificar se ocorreu algum erro durante a conexão
-        socket.on('connect_error', (error) => {
-            console.error('Erro de conexão:', error);
-        });
-
-    }, []);
+        // Cleanup: Certifique-se de desconectar quando o componente for desmontado
+        // return () => {
+        //     console.log('Desmontando componente. Desconectando WebSocket...');
+        //     webSocketService.disconnect();
+        // };
+    }, [socket, webSocketService]); // Depen
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
