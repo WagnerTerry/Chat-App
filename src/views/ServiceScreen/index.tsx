@@ -76,15 +76,24 @@ export const ServiceScreen = () => {
             <main>
                 <div className="chat-list">
                     <h2>Atendimento</h2>
-                    {calls.map((call, index) => (
-                        <Card
-                            key={index}
-                            icon={ChatIcon}
-                            title={call.caller}
-                            subtitle={call.service}
-                            word={call.startDate}
-                        />
-                    ))}
+                    {calls.map((call, index) => {
+                        // Converte a string de data para um objeto Date
+                        const startDate = new Date(call.startDate);
+
+                        // Obtém hora e minuto formatados
+                        const hours = startDate.getHours().toString().padStart(2, '0');
+                        const minutes = startDate.getMinutes().toString().padStart(2, '0');
+
+                        return (
+                            <Card
+                                key={index}
+                                icon={ChatIcon}
+                                title={call.caller}
+                                subtitle={call.service}
+                                word={`${hours}:${minutes}`}
+                            />
+                        );
+                    })}
                 </div>
                 <div className="chat-information">
                     <h3>Chamada selecionada</h3>
