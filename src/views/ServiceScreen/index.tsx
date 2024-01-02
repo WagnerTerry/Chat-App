@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+
 import WebSocketService from "../../services/WebSocketService";
 
 import Card from "../../Components/Card";
@@ -16,6 +17,7 @@ interface CallData {
 }
 
 export const ServiceScreen = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const webSocketService = WebSocketService.getInstance()
     const [calls, setCalls] = useState<CallData[]>([]);
@@ -62,6 +64,23 @@ export const ServiceScreen = () => {
         };
     }, [location?.state?.username, location?.state?.maxCalls, webSocketService]);
 
+    const handleDisconnect = () => {
+        const socket = webSocketService.getSocket();
+        const username = location?.state?.username;
+
+        if (socket && socket.connected && username) {
+            // Emitir o evento USER_DISCONNECT para o servidor
+            socket.emit('USER_DISCONNECT', { username });
+
+            // Desconectar o socket localmente (opcional)
+            webSocketService.disconnect();
+            console.log("Usuário desconectado")
+        }
+
+        // Navegar de volta à tela de conexão ou para onde for apropriado
+        navigate('/');
+    };
+
     return (
         <div id="service">
 
@@ -69,7 +88,7 @@ export const ServiceScreen = () => {
 
             <header>
                 <strong>{location && location.state && location.state.username}</strong>
-                <button>Desconectar</button>
+                <button onClick={handleDisconnect}>Desconectar</button>
             </header>
 
             <main>
