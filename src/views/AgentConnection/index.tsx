@@ -28,14 +28,42 @@ const AgentConnection: React.FC = () => {
 
             <div className='connection-data'>
                 <div>
-                    <label htmlFor="name" className="input-label">Usuário</label>
-                    <input type="text" value={username} className="styled-input" placeholder='Usuário' onChange={handleNameChange} />
+                    <label
+                        htmlFor="name"
+                        className="input-label"
+                    >
+                        Usuário
+                    </label>
+                    <input
+                        type="text"
+                        value={username}
+                        className="styled-input"
+                        placeholder='Usuário'
+                        onChange={handleNameChange}
+                    />
                 </div>
                 <div>
-                    <label htmlFor="maxCalls" className="input-label">Máximo de chamadas</label>
-                    <input type="text" value={maxCalls} className="styled-input" placeholder='Máximo de chamadas' onChange={handleMaxCallsChange} />
+                    <label
+                        htmlFor="maxCalls"
+                        className="input-label"
+                    >
+                        Máximo de chamadas
+                    </label>
+                    <input
+                        type="text"
+                        value={maxCalls}
+                        className="styled-input"
+                        placeholder='Máximo de chamadas'
+                        onChange={handleMaxCallsChange}
+                    />
                 </div>
-                <button className="styled-button" onClick={handleJoinRoom}>Conectar</button>
+                <button
+                    className={`styled-button ${username.trim() === '' || maxCalls.trim() === '' ? 'disabled' : ''}`}
+                    onClick={handleJoinRoom}
+                    disabled={username.trim() === '' || maxCalls.trim() === ''}
+                >
+                    Conectar
+                </button>
             </div>
 
         </div>
