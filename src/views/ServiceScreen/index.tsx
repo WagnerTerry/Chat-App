@@ -22,20 +22,32 @@ export const ServiceScreen = () => {
     const webSocketService = WebSocketService.getInstance()
     const [calls, setCalls] = useState<CallData[]>([]);
     const [selectedCall, setSelectedCall] = useState<CallData | null>(null);
-
+    const [isWebSocketReady, setIsWebSocketReady] = useState(false);
 
     useEffect(() => {
         const socket = webSocketService.getSocket();
 
         // Verificar se a conexão WebSocket está pronta
-        if (socket && socket.connected) {
-            // Enviar o evento USER_CONNECT para o servidor
-            const userData = {
-                username: location?.state?.username || '',
-                maxCalls: location?.state?.maxCalls || 0,
-            };
+        if (socket) {
+            // Ouvir eventos de conexão e desconexão
+            socket.on('connect', () => {
+                // Enviar o evento USER_CONNECT para o servidor apenas quando a conexão estiver estabelecida
+                const userData = {
+                    username: location?.state?.username || '',
+                    maxCalls: location?.state?.maxCalls || 0,
+                };
 
-            socket.emit('USER_CONNECT', userData);
+                socket.emit('USER_CONNECT', userData);
+                setIsWebSocketReady(true);
+            });
+
+            // Atualiza o estado quando a conexão for fechada ou ocorrer um erro
+            socket.on('disconnect', () => {
+                setIsWebSocketReady(false);
+            });
+            socket.on('connect_error', () => {
+                setIsWebSocketReady(false);
+            });
 
             // Ouvir eventos de chamadas do servidor
             socket.on('NEW_CALL', (callData: CallData) => {
@@ -67,25 +79,16 @@ export const ServiceScreen = () => {
 
                 // Aqui você pode decidir se deseja atualizar o estado local de alguma forma
             });
-
-
-            // // Ouvir eventos de chamadas do servidor
-            // socket.on('CALL_RECEIVED', (callData) => {
-            //     // Exibir informações da chamada no console (substitua pelo seu código real)
-            //     console.log('Chamada recebida:', callData);
-
-            //     // Atualizar o estado com as chamadas recebidas
-            //     setCalls((prevCalls) => [...prevCalls, callData]);
-            // });
         } else {
             console.warn('Conexão WebSocket não está pronta. Não foi possível enviar USER_CONNECT.');
         }
 
 
+
         // Cleanup: Desconectar os event listeners quando o componente for desmontado
         return () => {
             if (socket) {
-                socket.off('CALL_RECEIVED');
+                socket.off('USER_DISCONNECT');
             }
         };
     }, [location?.state?.username, location?.state?.maxCalls, webSocketService]);
@@ -139,53 +142,61 @@ export const ServiceScreen = () => {
             </header>
 
             <main>
-                <div className="chat-list">
-                    <h2>Atendimento</h2>
-                    {calls.map((call, index) => {
-                        // Converte a string de data para um objeto Date
-                        const startDate = new Date(call.startDate);
+                {isWebSocketReady ?
+                    <>
+                        <div className="chat-list">
 
-                        // Obtém hora e minuto formatados
-                        const hours = startDate.getHours().toString().padStart(2, '0');
-                        const minutes = startDate.getMinutes().toString().padStart(2, '0');
+                            <h2>Atendimentos</h2>
+                            {calls.map((call, index) => {
+                                // Converte a string de data para um objeto Date
+                                const startDate = new Date(call.startDate);
 
-                        // // Obtém minutos e segundos formatados
-                        // const minutes = startDate.getMinutes().toString().padStart(2, '0');
-                        // const seconds = startDate.getSeconds().toString().padStart(2, '0');
+                                // Obtém hora e minuto formatados
+                                const hours = startDate.getHours().toString().padStart(2, '0');
+                                const minutes = startDate.getMinutes().toString().padStart(2, '0');
 
-                        return (
-                            <Card
-                                key={index}
-                                icon={ChatIcon}
-                                title={call.caller}
-                                subtitle={call.service}
-                                word={`${hours}:${minutes}`}
-                                onClick={() => handleCardClick(call)}
-                            />
-                        );
-                    })}
-                </div>
-                <div className="chat-information">
-                    <h3>Chamada selecionada</h3>
+                                // // Obtém minutos e segundos formatados
+                                // const minutes = startDate.getMinutes().toString().padStart(2, '0');
+                                // const seconds = startDate.getSeconds().toString().padStart(2, '0');
 
-                    {selectedCall && (
-                        <>
-                            <span>
-                                CallId: {selectedCall.callId} <br />
-                                Midia: {selectedCall.media} <br />
-                                Data Inicial: {selectedCall.startDate} <br />
-                                Serviço: {selectedCall.service} <br />
-                                Origem: {selectedCall.caller} <br />
-                            </span>
+                                return (
+                                    <Card
+                                        key={index}
+                                        icon={ChatIcon}
+                                        title={call.caller}
+                                        subtitle={call.service}
+                                        word={`${hours}:${minutes}`}
+                                        onClick={() => handleCardClick(call)}
+                                    />
+                                );
+                            })}
+                        </div>
+                        <div className="chat-information">
+                            <h3>Chamada selecionada</h3>
 
-                            <div className="end-chat">
-                                <button onClick={() => handleEndCall(selectedCall?.callId)}>
-                                    Finalizar
-                                </button>
-                            </div>
-                        </>
-                    )}
-                </div>
+                            {selectedCall && (
+                                <>
+                                    <span>
+                                        CallId: {selectedCall.callId} <br />
+                                        Midia: {selectedCall.media} <br />
+                                        Data Inicial: {selectedCall.startDate} <br />
+                                        Serviço: {selectedCall.service} <br />
+                                        Origem: {selectedCall.caller} <br />
+                                    </span>
+
+                                    <div className="end-chat">
+                                        <button onClick={() => handleEndCall(selectedCall?.callId)}>
+                                            Finalizar
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </>
+                    :
+                    <p>Conexão WebSocket não está pronta. Aguarde...</p>
+                }
+
             </main>
 
         </div>

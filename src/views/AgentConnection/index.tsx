@@ -32,7 +32,7 @@ const AgentConnection: React.FC = () => {
 
             <div className="connection-data">
                 <div>
-                    <label htmlFor="name" className="input-label">
+                    <label htmlFor="username" className="input-label">
                         Usuário
                     </label>
                     <input
