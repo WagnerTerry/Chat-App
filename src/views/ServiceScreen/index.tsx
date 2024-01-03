@@ -41,6 +41,18 @@ export const ServiceScreen = () => {
                 setIsWebSocketReady(true);
             });
 
+            //Ouvir evento de conexão do usuário
+            socket.on('USER_CONNECTED', (userData: { username: string, maxCalls: number }) => {
+                console.log('Usuário conectado com sucesso:', userData);
+                // Você pode tratar as informações do usuário conectado aqui
+            });
+
+            // // Ouvir evento de erro na conexão do usuário
+            // socket.on('USER_CONNECTION_ERROR', (errorData: { username: string, maxCalls: number, error: string }) => {
+            //     console.error('Erro na conexão do usuário:', errorData);
+            //     // Trate o erro conforme necessário
+            // });
+
             // Atualiza o estado quando a conexão for fechada ou ocorrer um erro
             socket.on('disconnect', () => {
                 setIsWebSocketReady(false);
@@ -83,18 +95,19 @@ export const ServiceScreen = () => {
             console.warn('Conexão WebSocket não está pronta. Não foi possível enviar USER_CONNECT.');
         }
 
-
-
         // Cleanup: Desconectar os event listeners quando o componente for desmontado
         return () => {
             if (socket) {
                 socket.off('NEW_CALL');
                 socket.off('CALL_ENDED');
                 socket.off('END_CALL_ERROR');
-                socket.off('USER_DISCONNECT')
+                socket.off('USER_CONNECTED');
+                socket.off('USER_CONNECTION_ERROR');
+                // socket.off('USER_DISCONNECT')
             }
         };
     }, [location?.state?.username, location?.state?.maxCalls, webSocketService]);
+
 
     const handleDisconnect = () => {
         const socket = webSocketService.getSocket();
