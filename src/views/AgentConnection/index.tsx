@@ -2,14 +2,11 @@ import React, { useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import './style.scss';
-import WebSocketService from '../../services/WebSocketService';
 
 const AgentConnection: React.FC = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [maxCalls, setMaxCalls] = useState('');
-    const webSocketService = WebSocketService.getInstance()
-    const socket = webSocketService.getSocket();
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
@@ -20,7 +17,7 @@ const AgentConnection: React.FC = () => {
     };
 
     const handleJoinRoom = () => {
-        if (username.trim() !== '' && maxCalls.trim() !== '' && socket) {
+        if (username.trim() !== '' && maxCalls.trim() !== '') {
 
             navigate('/ServiceScreen', { state: { username, maxCalls } });
         }
