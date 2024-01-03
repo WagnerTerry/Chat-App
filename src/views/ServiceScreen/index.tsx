@@ -154,7 +154,11 @@ export const ServiceScreen = () => {
             <h1>Tela de atendimento</h1>
 
             <header>
-                <strong>{location && location.state && location.state.username}</strong>
+                <strong>
+                    {location && location.state && location.state.username &&
+                        location.state.username.charAt(0).toUpperCase() + location.state.username.slice(1)
+                    }
+                </strong>
                 <button onClick={handleDisconnect}>Desconectar</button>
             </header>
 
