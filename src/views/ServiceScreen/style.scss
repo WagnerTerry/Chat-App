@@ -39,7 +39,9 @@
         .chat-information {
             background-color: #ccc;
             flex: 1;
-            padding: 8px
+            padding: 8px;
+            height: 200px;
+            max-height: 250px;
         }
 
         .end-chat {

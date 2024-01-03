@@ -21,6 +21,8 @@ export const ServiceScreen = () => {
     const location = useLocation();
     const webSocketService = WebSocketService.getInstance()
     const [calls, setCalls] = useState<CallData[]>([]);
+    const [selectedCall, setSelectedCall] = useState<CallData | null>(null);
+
 
     useEffect(() => {
         const socket = webSocketService.getSocket();
@@ -105,22 +107,26 @@ export const ServiceScreen = () => {
         navigate('/');
     };
 
-    // const handleEndCall = (callId: string) => {
-    //     const socket = webSocketService.getSocket();
-    //     const username = location?.state?.username;
+    const handleEndCall = (callId: string) => {
+        const socket = webSocketService.getSocket();
+        const username = location?.state?.username;
 
-    //     if (socket && socket.connected && username) {
-    //         // Emitir o evento END_CALL para o servidor
-    //         socket.emit('END_CALL', { callId });
+        if (socket && socket.connected && username) {
+            // Emitir o evento END_CALL para o servidor
+            socket.emit('END_CALL', { callId });
 
-    //         // Atualizar o estado local para refletir o encerramento da chamada
-    //         setCalls((prevCalls) =>
-    //             prevCalls.map((call) =>
-    //                 call.callId === callId ? { ...call, ended: true } : call
-    //             )
-    //         );
-    //     }
-    // };
+            // Atualizar o estado local para refletir o encerramento da chamada
+            setCalls((prevCalls) =>
+                prevCalls.map((call) =>
+                    call.callId === callId ? { ...call, ended: true } : call
+                )
+            );
+        }
+    };
+
+    const handleCardClick = (call: CallData) => {
+        setSelectedCall(call);
+    }
 
     return (
         <div id="service">
@@ -154,6 +160,7 @@ export const ServiceScreen = () => {
                                 title={call.caller}
                                 subtitle={call.service}
                                 word={`${hours}:${minutes}`}
+                                onClick={() => handleCardClick(call)}
                             />
                         );
                     })}
@@ -161,18 +168,23 @@ export const ServiceScreen = () => {
                 <div className="chat-information">
                     <h3>Chamada selecionada</h3>
 
-                    <span>
-                        CallId: 123121 <br />
-                        Midia: CHAT <br />
-                        Data Inicial: 20/12/2023 13:30:10 <br />
-                        Serviço: Nova matrícula <br />
-                        Origem: Lucas <br />
-                    </span>
+                    {selectedCall && (
+                        <>
+                            <span>
+                                CallId: {selectedCall.callId} <br />
+                                Midia: {selectedCall.media} <br />
+                                Data Inicial: {selectedCall.startDate} <br />
+                                Serviço: {selectedCall.service} <br />
+                                Origem: {selectedCall.caller} <br />
+                            </span>
 
-                    <div className="end-chat">
-                        <button>Finalizar</button>
-                    </div>
-
+                            <div className="end-chat">
+                                <button onClick={() => handleEndCall(selectedCall?.callId)}>
+                                    Finalizar
+                                </button>
+                            </div>
+                        </>
+                    )}
                 </div>
             </main>
 
