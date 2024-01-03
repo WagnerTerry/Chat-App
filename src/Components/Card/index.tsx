@@ -7,12 +7,15 @@ interface CardProps {
     title: string;
     subtitle: string;
     word: string;
+    isSelected: boolean | null;
     onClick: () => void
 }
 
-const Card: React.FC<CardProps> = ({ icon, title, subtitle, word, onClick }) => {
+const Card: React.FC<CardProps> = ({ icon, title, subtitle, word, isSelected, onClick }) => {
+    const cardClasses = `card ${isSelected ? 'selected' : ''}`;
+
     return (
-        <div className="card" onClick={onClick}>
+        <div className={cardClasses} onClick={onClick}>
             <div className="left-side">
                 <SvgIcon component={icon} className='icon' />
             </div>

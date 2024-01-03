@@ -13,7 +13,8 @@ interface CallData {
     caller: string;
     media: string;
     service: string;
-    startDate: string
+    startDate: string;
+    isSelected: boolean;
 }
 
 export const ServiceScreen = () => {
@@ -171,6 +172,9 @@ export const ServiceScreen = () => {
                                 const hours = startDate.getHours().toString().padStart(2, '0');
                                 const minutes = startDate.getMinutes().toString().padStart(2, '0');
 
+                                const isSelected = selectedCall && call.callId === selectedCall.callId;
+
+
                                 // // Obtém minutos e segundos formatados
                                 // const minutes = startDate.getMinutes().toString().padStart(2, '0');
                                 // const seconds = startDate.getSeconds().toString().padStart(2, '0');
@@ -183,6 +187,7 @@ export const ServiceScreen = () => {
                                         subtitle={call.service}
                                         word={`${hours}:${minutes}`}
                                         onClick={() => handleCardClick(call)}
+                                        isSelected={isSelected}
                                     />
                                 );
                             })}

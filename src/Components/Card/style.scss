@@ -12,6 +12,11 @@
         align-items: center;
     }
 
+    &.selected {
+        border-left-color: #277fd6;
+        border-left-width: 8px;
+    }
+
     .icon {
         width: 40px;
         height: 40px;
