@@ -44,6 +44,29 @@ export const ServiceScreen = () => {
                 setCalls((prevCalls) => [...prevCalls, callData]);
             });
 
+            // Ouvir eventos de chamadas encerradas com sucesso
+            socket.on('CALL_ENDED', (endedCallData: { callId: string }) => {
+                console.log('Chamada encerrada com sucesso:', endedCallData);
+
+                // Atualizar o estado local para refletir o encerramento da chamada
+                setCalls((prevCalls) =>
+                    prevCalls.map((call) =>
+                        call.callId === endedCallData.callId ? { ...call, ended: true } : call
+                    )
+                );
+            });
+
+            // Ouvir eventos de falha ao encerrar chamada
+            socket.on('END_CALL_ERROR', (errorData: { callId: string; error: string }) => {
+                console.error('Erro ao encerrar chamada:', errorData);
+
+                // Exibir mensagem de erro ou tratar conforme necessário
+                // ...
+
+                // Aqui você pode decidir se deseja atualizar o estado local de alguma forma
+            });
+
+
             // // Ouvir eventos de chamadas do servidor
             // socket.on('CALL_RECEIVED', (callData) => {
             //     // Exibir informações da chamada no console (substitua pelo seu código real)
@@ -55,6 +78,7 @@ export const ServiceScreen = () => {
         } else {
             console.warn('Conexão WebSocket não está pronta. Não foi possível enviar USER_CONNECT.');
         }
+
 
         // Cleanup: Desconectar os event listeners quando o componente for desmontado
         return () => {
@@ -80,6 +104,23 @@ export const ServiceScreen = () => {
         // Navegar de volta à tela de conexão ou para onde for apropriado
         navigate('/');
     };
+
+    // const handleEndCall = (callId: string) => {
+    //     const socket = webSocketService.getSocket();
+    //     const username = location?.state?.username;
+
+    //     if (socket && socket.connected && username) {
+    //         // Emitir o evento END_CALL para o servidor
+    //         socket.emit('END_CALL', { callId });
+
+    //         // Atualizar o estado local para refletir o encerramento da chamada
+    //         setCalls((prevCalls) =>
+    //             prevCalls.map((call) =>
+    //                 call.callId === callId ? { ...call, ended: true } : call
+    //             )
+    //         );
+    //     }
+    // };
 
     return (
         <div id="service">
