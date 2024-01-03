@@ -54,6 +54,18 @@ export const ServiceScreen = () => {
             //     // Trate o erro conforme necessário
             // });
 
+            // Ouvir eventos de desconexão do usuário
+            socket.on('USER_DISCONNECTED', (disconnectedUser: { username: string }) => {
+                console.log('Usuário desconectado com sucesso:', disconnectedUser);
+                // Trate a desconexão conforme necessário
+            });
+
+            // Ouvir eventos de erro na desconexão do usuário
+            socket.on('USER_DISCONNECTION_ERROR', (disconnectionError: { username: string, error: string }) => {
+                console.error('Erro na desconexão do usuário:', disconnectionError);
+                // Trate o erro na desconexão conforme necessário
+            });
+
             // Atualiza o estado quando a conexão for fechada ou ocorrer um erro
             socket.on('disconnect', () => {
                 setIsWebSocketReady(false);
@@ -69,6 +81,18 @@ export const ServiceScreen = () => {
 
                 // Atualizar o estado com as chamadas recebidas
                 setCalls((prevCalls) => [...prevCalls, callData]);
+            });
+
+            // Ouvir evento de chamada atendida com sucesso
+            socket.on('NEW_CALL_ANSWERED', (answeredCallData: { callId: string }) => {
+                console.log('Chamada atendida com sucesso:', answeredCallData);
+                // Você pode tratar a chamada atendida conforme necessário
+            });
+
+            // Ouvir evento de falha ao receber a chamada
+            socket.on('NEW_CALL_ERROR', (newCallErrorData: { callId: string, error: string }) => {
+                console.error('Erro ao receber nova chamada:', newCallErrorData);
+                // Trate o erro ao receber a chamada conforme necessário
             });
 
             // Ouvir eventos de chamadas encerradas com sucesso
@@ -104,7 +128,10 @@ export const ServiceScreen = () => {
                 socket.off('END_CALL_ERROR');
                 socket.off('USER_CONNECTED');
                 socket.off('USER_CONNECTION_ERROR');
-                // socket.off('USER_DISCONNECT')
+                socket.off('USER_DISCONNECTED');
+                socket.off('USER_DISCONNECTION_ERROR');
+                socket.off('NEW_CALL_ANSWERED');
+                socket.off('NEW_CALL_ERROR');
             }
         };
     }, [location?.state?.username, location?.state?.maxCalls, webSocketService]);
