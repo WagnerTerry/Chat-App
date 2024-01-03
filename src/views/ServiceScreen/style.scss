@@ -36,7 +36,16 @@
             margin-right: 16px;
             border: 1px solid #d1cece;
             padding: 8px;
-            border-radius: 10px
+            border-radius: 10px;
+            height: 470px;
+            overflow-y: auto;
+
+            // Para ocultar a barra de rolagem
+            scrollbar-width: thin;
+
+            &::-webkit-scrollbar {
+                width: 0;
+            }
         }
 
         .chat-information {
