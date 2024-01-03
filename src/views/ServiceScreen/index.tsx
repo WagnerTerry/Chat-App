@@ -88,7 +88,10 @@ export const ServiceScreen = () => {
         // Cleanup: Desconectar os event listeners quando o componente for desmontado
         return () => {
             if (socket) {
-                socket.off('USER_DISCONNECT');
+                socket.off('NEW_CALL');
+                socket.off('CALL_ENDED');
+                socket.off('END_CALL_ERROR');
+                socket.off('USER_DISCONNECT')
             }
         };
     }, [location?.state?.username, location?.state?.maxCalls, webSocketService]);
