@@ -14,6 +14,7 @@ interface CallData {
     media: string;
     service: string;
     startDate: string;
+    ended: boolean;
     isSelected: boolean;
 }
 
@@ -168,6 +169,14 @@ export const ServiceScreen = () => {
                     call.callId === callId ? { ...call, ended: true } : call
                 )
             );
+
+            // Verificar se a chamada encerrada é a mesma que a chamada selecionada
+            if (selectedCall && selectedCall.callId === callId) {
+                // Atualizar selectedCall para refletir o encerramento
+                setSelectedCall((prevSelectedCall) =>
+                    prevSelectedCall ? { ...prevSelectedCall, ended: true } : prevSelectedCall
+                );
+            }
         }
     };
 
@@ -233,7 +242,7 @@ export const ServiceScreen = () => {
                                     </span>
 
                                     <div className="end-chat">
-                                        <button onClick={() => handleEndCall(selectedCall?.callId)}>
+                                        <button disabled={!selectedCall || selectedCall.ended} onClick={() => handleEndCall(selectedCall?.callId)}>
                                             Finalizar
                                         </button>
                                     </div>
