@@ -1,15 +1,15 @@
 import React, { useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import './style.scss';
 import WebSocketService from '../../services/WebSocketService';
+
+import './style.scss';
 
 const AgentConnection: React.FC = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [maxCalls, setMaxCalls] = useState('');
     const webSocketService = WebSocketService.getInstance();
-
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);

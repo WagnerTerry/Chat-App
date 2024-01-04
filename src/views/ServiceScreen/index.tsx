@@ -7,7 +7,6 @@ import Card from "../../Components/Card";
 import ChatIcon from '@mui/icons-material/Chat';
 
 import './style.scss'
-
 interface CallData {
     callId: string;
     caller: string;
@@ -176,7 +175,6 @@ export const ServiceScreen = () => {
                 )
             );
             setIsLoading(false)
-
 
             // Verificar se a chamada encerrada é a mesma que a chamada selecionada
             if (selectedCall && selectedCall.callId === callId) {
