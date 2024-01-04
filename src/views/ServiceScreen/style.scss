@@ -70,6 +70,11 @@
                 height: 32px;
                 cursor: pointer;
 
+                &.finished {
+                    background-color: rgb(129, 125, 125);
+                    cursor: not-allowed;
+                }
+
             }
         }
     }

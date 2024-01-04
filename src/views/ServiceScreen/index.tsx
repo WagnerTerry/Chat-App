@@ -229,7 +229,7 @@ export const ServiceScreen = () => {
                             })}
                         </div>
                         <div className="chat-information">
-                            <h3>Chamada selecionada</h3>
+                            <h3>{selectedCall?.ended ? "Chamada finalizada" : "Chamada selecionada"}</h3>
 
                             {selectedCall && (
                                 <>
@@ -242,8 +242,12 @@ export const ServiceScreen = () => {
                                     </span>
 
                                     <div className="end-chat">
-                                        <button disabled={!selectedCall || selectedCall.ended} onClick={() => handleEndCall(selectedCall?.callId)}>
-                                            Finalizar
+                                        <button
+                                            disabled={!selectedCall || selectedCall.ended}
+                                            onClick={() => handleEndCall(selectedCall?.callId)}
+                                            className={selectedCall?.ended ? 'finished' : ''}
+                                        >
+                                            {selectedCall?.ended ? 'Finalizado' : 'Finalizar'}
                                         </button>
                                     </div>
                                 </>
