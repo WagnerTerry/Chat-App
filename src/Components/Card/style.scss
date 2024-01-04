@@ -17,6 +17,10 @@
         border-left-width: 8px;
     }
 
+    &.ended {
+        border-left-color: #e91414;
+    }
+
     .icon {
         width: 40px;
         height: 40px;

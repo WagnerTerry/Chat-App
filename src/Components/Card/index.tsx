@@ -7,12 +7,13 @@ interface CardProps {
     title: string;
     subtitle: string;
     word: string;
+    ended?: boolean | null;
     isSelected: boolean | null;
     onClick: () => void
 }
 
-const Card: React.FC<CardProps> = ({ icon, title, subtitle, word, isSelected, onClick }) => {
-    const cardClasses = `card ${isSelected ? 'selected' : ''}`;
+const Card: React.FC<CardProps> = ({ icon, title, subtitle, word, isSelected, ended, onClick }) => {
+    const cardClasses = `card ${isSelected ? 'selected' : ''} ${ended ? 'ended' : ''}`;
 
     return (
         <div className={cardClasses} onClick={onClick}>
