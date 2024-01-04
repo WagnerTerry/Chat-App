@@ -25,6 +25,7 @@ export const ServiceScreen = () => {
     const [calls, setCalls] = useState<CallData[]>([]);
     const [selectedCall, setSelectedCall] = useState<CallData | null>(null);
     const [isWebSocketReady, setIsWebSocketReady] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const socket = webSocketService.getSocket();
@@ -70,9 +71,11 @@ export const ServiceScreen = () => {
             // Atualiza o estado quando a conexão for fechada ou ocorrer um erro
             socket.on('disconnect', () => {
                 setIsWebSocketReady(false);
+                setIsLoading(false)
             });
             socket.on('connect_error', () => {
                 setIsWebSocketReady(false);
+                setIsLoading(false)
             });
 
             // Ouvir eventos de chamadas do servidor
@@ -82,6 +85,7 @@ export const ServiceScreen = () => {
 
                 // Atualizar o estado com as chamadas recebidas
                 setCalls((prevCalls) => [...prevCalls, callData]);
+                setIsLoading(false)
             });
 
             // Ouvir evento de chamada atendida com sucesso
@@ -106,6 +110,8 @@ export const ServiceScreen = () => {
                         call.callId === endedCallData.callId ? { ...call, ended: true } : call
                     )
                 );
+                setIsLoading(false)
+
             });
 
             // Ouvir eventos de falha ao encerrar chamada
@@ -169,6 +175,8 @@ export const ServiceScreen = () => {
                     call.callId === callId ? { ...call, ended: true } : call
                 )
             );
+            setIsLoading(false)
+
 
             // Verificar se a chamada encerrada é a mesma que a chamada selecionada
             if (selectedCall && selectedCall.callId === callId) {
@@ -204,29 +212,34 @@ export const ServiceScreen = () => {
                         <div className="chat-list">
 
                             <h2>Atendimentos</h2>
-                            {calls.map((call, index) => {
-                                // Converte a string de data para um objeto Date
-                                const startDate = new Date(call.startDate);
+                            {!isLoading ?
+                                <>
+                                    {calls.map((call, index) => {
+                                        // Converte a string de data para um objeto Date
+                                        const startDate = new Date(call.startDate);
 
-                                // Obtém minutos e segundos formatados
-                                const minutes = startDate.getMinutes().toString().padStart(2, '0');
-                                const seconds = startDate.getSeconds().toString().padStart(2, '0');
+                                        // Obtém minutos e segundos formatados
+                                        const minutes = startDate.getMinutes().toString().padStart(2, '0');
+                                        const seconds = startDate.getSeconds().toString().padStart(2, '0');
 
-                                const isSelected = selectedCall && call.callId === selectedCall.callId;
-                                const isFinished = selectedCall && call.ended && call.callId === selectedCall.callId;
-                                return (
-                                    <Card
-                                        key={index}
-                                        icon={ChatIcon}
-                                        title={call.caller}
-                                        subtitle={call.service}
-                                        word={`${minutes}:${seconds}`}
-                                        ended={isFinished ? isFinished : null}
-                                        isSelected={isSelected ? isSelected : null}
-                                        onClick={() => handleCardClick(call)}
-                                    />
-                                );
-                            })}
+                                        const isSelected = selectedCall && call.callId === selectedCall.callId;
+                                        const isFinished = selectedCall && call.ended && call.callId === selectedCall.callId;
+                                        return (
+                                            <Card
+                                                key={index}
+                                                icon={ChatIcon}
+                                                title={call.caller}
+                                                subtitle={call.service}
+                                                word={`${minutes}:${seconds}`}
+                                                ended={isFinished ? isFinished : null}
+                                                isSelected={isSelected ? isSelected : null}
+                                                onClick={() => handleCardClick(call)}
+                                            />
+                                        );
+                                    })}
+                                </>
+                                : <span>Carregando...</span>
+                            }
                         </div>
                         <div className="chat-information">
                             <h3>{selectedCall?.ended ? "Chamada finalizada" : "Chamada selecionada"}</h3>
