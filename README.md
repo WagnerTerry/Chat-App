@@ -5,7 +5,6 @@
 ## Dependencias
 - npm i sass
 - npm i react-router-dom
-- npm i axios
 - npm i socket.io-client
 - npm i @mui/icons-material
 - npm i @mui/material
