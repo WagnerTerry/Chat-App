@@ -199,16 +199,12 @@ export const ServiceScreen = () => {
                                 // Converte a string de data para um objeto Date
                                 const startDate = new Date(call.startDate);
 
-                                // Obtém hora e minuto formatados
-                                const hours = startDate.getHours().toString().padStart(2, '0');
+
+                                // Obtém minutos e segundos formatados
                                 const minutes = startDate.getMinutes().toString().padStart(2, '0');
+                                const seconds = startDate.getSeconds().toString().padStart(2, '0');
 
                                 const isSelected = selectedCall && call.callId === selectedCall.callId;
-
-
-                                // // Obtém minutos e segundos formatados
-                                // const minutes = startDate.getMinutes().toString().padStart(2, '0');
-                                // const seconds = startDate.getSeconds().toString().padStart(2, '0');
 
                                 return (
                                     <Card
@@ -216,7 +212,7 @@ export const ServiceScreen = () => {
                                         icon={ChatIcon}
                                         title={call.caller}
                                         subtitle={call.service}
-                                        word={`${hours}:${minutes}`}
+                                        word={`${minutes}:${seconds}`}
                                         onClick={() => handleCardClick(call)}
                                         isSelected={isSelected}
                                     />
